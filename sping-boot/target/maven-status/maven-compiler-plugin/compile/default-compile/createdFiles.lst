@@ -1,0 +1,6 @@
+com/dt/pausepick/controllers/DemoController.class
+com/dt/pausepick/services/RecognizeCelebritiesResult.class
+com/dt/pausepick/PausepickApplication.class
+com/dt/pausepick/services/WorkItem.class
+com/dt/pausepick/controllers/ActorController.class
+com/dt/pausepick/services/ActorRecognitionService.class
