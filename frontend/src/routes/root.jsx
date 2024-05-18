@@ -16,6 +16,7 @@ const Root = () => {
   const handleStart = () => {
     setSidebarVisible(false);
     setActors([]);
+    setBox([]);
   };
 
   const handlePause = async () => {
@@ -32,9 +33,8 @@ const Root = () => {
     try {
       const actorsResponse = await getActors(imageUrl);
 
-     setActors(actorsResponse.data);
-      setBox(actorsResponse.data.map((c) => c.boundingBox))
-
+      setActors(actorsResponse.data);
+      setBox(actorsResponse.data.map((c) => c.boundingBox));
     } catch (error) {
       console.error("error", error);
     } finally {
@@ -65,9 +65,9 @@ const Root = () => {
                 onPlay={handleStart}
                 controls
               ></video>
-              {box.map( b => <BoundingBox top={b.top} left={b.left} height={b.height} key={b.top} width={b.width}>
-              </BoundingBox>)}
-        
+              {box.map((b) => (
+                <BoundingBox top={b.top} left={b.left} height={b.height} key={b.top} width={b.width}></BoundingBox>
+              ))}
             </div>
             <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
             <button
