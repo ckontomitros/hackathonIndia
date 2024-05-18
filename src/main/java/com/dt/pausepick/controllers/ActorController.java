@@ -3,6 +3,7 @@ package com.dt.pausepick.controllers;
 import com.dt.pausepick.services.ActorRecognitionService;
 import com.dt.pausepick.services.WorkItem;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/actor")
+@CrossOrigin
 public class ActorController {
     private final ActorRecognitionService actorRecognitionService;
 
