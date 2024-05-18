@@ -74,13 +74,13 @@ const Root = () => {
               ))}
             </div>
             <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
-            <button
+            {/* <button
               type="button"
               onClick={handlePause}
               className="text-white w-48 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xl mx-auto mb-4 px-5 py-6 mt-4 focus:outline-none dark:focus:ring-blue-800"
             >
               Pick!
-            </button>
+            </button> */}
           </main>
           {sidebarVisible && (
             <aside className="my-2 px-2 w-full overflow-hidden xl:w-1/3 text-gray-900">
@@ -147,38 +147,70 @@ const Root = () => {
                   })
                 )}
               </div>
-              <div>
-                <h5 className="mb-2 text-lg font-semibold flex gap-2">
-                  <svg
-                    className="w-6 h-6"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"
-                    />
-                  </svg>
-                  <span>Points of interest</span>
-                </h5>
-                {isLoading ? (
-                  <div>Searching...</div>
-                ) : !labels.length ? (
-                  <div>No actors identified.</div>
-                ) : (
-                  <ul className="max-w-xl space-y-1 list-none">
-                    {labels.map((label, index) => (
-                      <li key={index}>{label.name}</li>
-                    ))}
-                  </ul>
-                )}
+              <div className="flex gap-8">
+                <div>
+                  <h5 className="mb-2 text-lg font-semibold flex gap-2">
+                    <svg
+                      className="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"
+                      />
+                    </svg>
+                    <span>Points of interest</span>
+                  </h5>
+                  {isLoading ? (
+                    <div>Searching...</div>
+                  ) : !labels.length ? (
+                    <div>No points of interest identified.</div>
+                  ) : (
+                    <ul className="ms-8 max-w-xl space-y-1 list-none">
+                      {labels.map((label, index) => (
+                        <li key={index}>{label.name}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <div>
+                  <h5 className="mb-2 text-lg font-semibold flex gap-2">
+                    <svg
+                      className="w-6 h-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z" />
+                    </svg>
+
+                    <span>Emotions</span>
+                  </h5>
+                  {isLoading ? (
+                    <div>Searching...</div>
+                  ) : !actors[0]?.emotions?.length ? (
+                    <div>No emotions identified.</div>
+                  ) : (
+                    <ul className="ms-8 max-w-xl space-y-1 list-none">
+                      {actors[0].emotions.slice(0, 3).map((emotion, index) => (
+                        <li className="lowercase" key={index}>
+                          {emotion}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </div>
             </aside>
           )}
