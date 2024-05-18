@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from "react";
-import { postScreenshot } from "../api";
+import { getActors, getLabels } from "../api";
 import Header from "../components/header";
 
 const Root = () => {
@@ -11,6 +11,7 @@ const Root = () => {
 
   const handleStart = () => {
     setSidebarVisible(false);
+    setActorNames([]);
   };
 
   const handlePause = async () => {
@@ -25,9 +26,10 @@ const Root = () => {
     setSidebarVisible(true);
 
     try {
-      const response = await postScreenshot(imageUrl);
+      const actorsResponse = await getActors(imageUrl);
+      const labelsResponse = await getLabels(imageUrl);
 
-      setActorNames(response.data);
+      setActorNames(actorsResponse.data);
     } catch (error) {
       console.error("error", error);
     } finally {
@@ -36,7 +38,10 @@ const Root = () => {
   };
 
   const mainClassnames = useMemo(
-    () => (sidebarVisible ? "my-2 px-2 w-full overflow-hidden xl:w-2/3 transition-all duration-1000" : "my-2 px-2 w-full overflow-hidden transition-all duration-1000"),
+    () =>
+      sidebarVisible
+        ? "my-2 px-2 w-full overflow-hidden xl:w-2/3 transition-all duration-1000"
+        : "my-2 px-2 w-full overflow-hidden transition-all duration-1000",
     [sidebarVisible]
   );
 
