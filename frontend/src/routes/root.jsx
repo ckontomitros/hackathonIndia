@@ -1,14 +1,14 @@
 import { useRef, useState, useMemo } from "react";
-import { getActors, getLabels } from "../api";
+import { getActors } from "../api";
 import Header from "../components/header";
 import { getCurrencyFormat, getFullDate } from "../helpers";
+import { Link } from "react-router-dom";
 
 const Root = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [actors, setActors] = useState([]);
-  const [labels, setLabels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleStart = () => {
@@ -29,10 +29,8 @@ const Root = () => {
 
     try {
       const actorsResponse = await getActors(imageUrl);
-      const labelsResponse = await getLabels(imageUrl);
 
       setActors(actorsResponse.data);
-      setLabels(labelsResponse.data);
     } catch (error) {
       console.error("error", error);
     } finally {
@@ -68,7 +66,13 @@ const Root = () => {
               </div>
             </div>
             <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
-            <button onClick={handlePause}></button>
+            <button
+              type="button"
+              onClick={handlePause}
+              className="text-white w-48 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xl mx-auto mb-4 px-5 py-6 mt-4 focus:outline-none dark:focus:ring-blue-800"
+            >
+              Pick!
+            </button>
           </main>
           {sidebarVisible && (
             <aside className="my-2 px-2 w-full overflow-hidden xl:w-1/3 text-gray-900">
@@ -89,7 +93,7 @@ const Root = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span>Actors</span>
+                  <span>Celebrities</span>
                 </h5>
                 {isLoading ? (
                   <div>Searching...</div>
@@ -97,9 +101,8 @@ const Root = () => {
                   <div>No actors identified.</div>
                 ) : (
                   actors.map((actor, index) => {
-                    console.log("actor", actor);
                     return (
-                      <div key={index} className="p-4 mw-full mx-auto bg-white rounded-xl shadow-lg flex items-center">
+                      <div key={index} className="p-4 mw-full mx-auto bg-white rounded-xl shadow-md flex items-center">
                         <div>
                           <div className="text-2xl font-medium mb-2">
                             {`${actor.actorDetails.name}`}
@@ -119,9 +122,14 @@ const Root = () => {
                             <dt className="text-gray-500 mt-1">Links:</dt>
                             {actor.urls.map((link, index) => (
                               <dd key={index}>
-                                <a href={link} target="_blank" rel="noreferrer">
+                                <Link
+                                  to={`https://${link}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className={"text-blue-600 dark:text-blue-500 hover:underline"}
+                                >
                                   {link}
-                                </a>
+                                </Link>
                               </dd>
                             ))}
                           </dl>
