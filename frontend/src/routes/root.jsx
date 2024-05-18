@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo } from "react";
-import { getActors } from "../api";
+import { getActors, getLabels } from "../api";
 import Header from "../components/header";
 import { getCurrencyFormat, getFullDate } from "../helpers";
 import { Link } from "react-router-dom";
@@ -10,6 +10,7 @@ const Root = () => {
   const canvasRef = useRef(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [actors, setActors] = useState([]);
+  const [labels, setLabels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [box, setBox] = useState([]);
 
@@ -35,6 +36,9 @@ const Root = () => {
 
       setActors(actorsResponse.data);
       setBox(actorsResponse.data.map((c) => c.boundingBox));
+
+      const labelsResponse = await getLabels(imageUrl);
+      setLabels(labelsResponse.data);
     } catch (error) {
       console.error("error", error);
     } finally {
@@ -141,6 +145,39 @@ const Root = () => {
                       </div>
                     );
                   })
+                )}
+              </div>
+              <div>
+                <h5 className="mb-2 text-lg font-semibold flex gap-2">
+                  <svg
+                    className="w-6 h-6"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"
+                    />
+                  </svg>
+                  <span>Points of interest</span>
+                </h5>
+                {isLoading ? (
+                  <div>Searching...</div>
+                ) : !labels.length ? (
+                  <div>No actors identified.</div>
+                ) : (
+                  <ul className="max-w-xl space-y-1 list-none">
+                    {labels.map((label, index) => (
+                      <li key={index}>{label.name}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
             </aside>
