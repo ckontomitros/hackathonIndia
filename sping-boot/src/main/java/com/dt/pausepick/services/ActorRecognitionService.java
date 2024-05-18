@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
 @Service
 @RequiredArgsConstructor
 public class ActorRecognitionService {
-    private final ActorDataHandlingService actorDataHandlingService
+    private final ActorDataHandlingService actorDataHandlingService;
 
     public List<WorkItem> detectLabels(byte[] bytes, String key) {
         try {

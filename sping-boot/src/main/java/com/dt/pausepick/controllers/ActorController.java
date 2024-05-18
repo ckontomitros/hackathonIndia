@@ -37,7 +37,6 @@ public class ActorController {
     public List<Dtos.Person> getActorNames(@RequestParam("image") MultipartFile image) throws Exception {
         byte[] bytes = image.getBytes();
         String name = image.getOriginalFilename();
-        List<Dtos.Person> recognizedActors = actorRecognitionService.recognizeActor(bytes, name);
-        return actorDataHandlingService.getRecognizedActorsDetails(recognizedActors);
+        return actorRecognitionService.recognizeActor(bytes, name);
     }
 }
