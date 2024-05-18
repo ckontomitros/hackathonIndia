@@ -1,6 +1,7 @@
 package com.dt.pausepick.controllers;
 
 import com.dt.pausepick.dto.Dtos;
+import com.dt.pausepick.services.ActorDataHandlingService;
 import com.dt.pausepick.services.ActorRecognitionService;
 import com.dt.pausepick.services.WorkItem;
 import org.springframework.http.MediaType;
@@ -18,9 +19,11 @@ import java.util.List;
 @CrossOrigin
 public class ActorController {
     private final ActorRecognitionService actorRecognitionService;
+    private final ActorDataHandlingService actorDataHandlingService;
 
-    public ActorController(ActorRecognitionService actorRecognitionService) {
+    public ActorController(ActorRecognitionService actorRecognitionService, ActorDataHandlingService actorDataRetrievalService) {
         this.actorRecognitionService = actorRecognitionService;
+        this.actorDataHandlingService = actorDataRetrievalService;
     }
 
     @PostMapping(value = "/labels", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -34,6 +37,7 @@ public class ActorController {
     public List<Dtos.Person> getActorNames(@RequestParam("image") MultipartFile image) throws Exception {
         byte[] bytes = image.getBytes();
         String name = image.getOriginalFilename();
-        return actorRecognitionService.recognizeActor(bytes, name);
+        List<Dtos.Person> recognizedActors = actorRecognitionService.recognizeActor(bytes, name);
+        return actorDataHandlingService.getRecognizedActorsDetails(recognizedActors);
     }
 }

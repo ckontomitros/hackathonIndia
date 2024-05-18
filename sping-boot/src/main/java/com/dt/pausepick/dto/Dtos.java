@@ -16,9 +16,10 @@ public class Dtos {
             Float matchConfidence,
             String knownGender,
             List<String> landmarks,
-            List<String> emotions
+            List<String> emotions,
+            ActorDetailsDto actorDetails
     ) {
-        public static Person toPerson(Celebrity celebrity){
+        public static Person toPerson(Celebrity celebrity, ActorDetailsDto actorDetails){
             return new Person(
                     celebrity.urls(),
                     celebrity.name(),
@@ -32,7 +33,8 @@ public class Dtos {
                     celebrity.matchConfidence(),
                     celebrity.knownGender().typeAsString(),
                     celebrity.face().landmarks().stream().map(Landmark::typeAsString).toList(),
-                    celebrity.face().emotions().stream().map(Emotion::typeAsString).toList()
+                    celebrity.face().emotions().stream().map(Emotion::typeAsString).toList(),
+                    actorDetails
             );
 
         }
