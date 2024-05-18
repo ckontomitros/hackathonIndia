@@ -1,5 +1,6 @@
 package com.dt.pausepick.controllers;
 
+import com.dt.pausepick.dto.Dtos;
 import com.dt.pausepick.services.ActorRecognitionService;
 import com.dt.pausepick.services.WorkItem;
 import org.springframework.http.MediaType;
@@ -30,7 +31,7 @@ public class ActorController {
     }
 
     @PostMapping(value = "/names", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public List<String> getActorNames(@RequestParam("image") MultipartFile image) throws Exception {
+    public List<Dtos.Person> getActorNames(@RequestParam("image") MultipartFile image) throws Exception {
         byte[] bytes = image.getBytes();
         String name = image.getOriginalFilename();
         return actorRecognitionService.recognizeActor(bytes, name);

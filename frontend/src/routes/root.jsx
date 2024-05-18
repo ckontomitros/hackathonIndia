@@ -29,7 +29,7 @@ const Root = () => {
       const actorsResponse = await getActors(imageUrl);
       const labelsResponse = await getLabels(imageUrl);
 
-      setActorNames(actorsResponse.data);
+      setActorNames(actorsResponse.data.map(c => c.name));
     } catch (error) {
       console.error("error", error);
     } finally {
@@ -51,7 +51,14 @@ const Root = () => {
       <div className="container mx-auto">
         <div className="flex flex-col flex-wrap  overflow-hidden xl:flex-row">
           <main className={mainClassnames}>
-            <video ref={videoRef} src="video.mp4" onPause={handlePause} onPlay={handleStart} controls></video>
+            <div class="relative">
+            <video ref={videoRef} src="video.mp4" onPause={handlePause} onPlay={handleStart} controls class="relative">
+
+            </video>
+            <div class="absolute top-2 left-2 w-40 h-24 bg-blue-200 border-2 border-black p-2 shadow-lg">
+        This is a small box at the top left.
+    </div>
+            </div>
             <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
           </main>
           {sidebarVisible && (

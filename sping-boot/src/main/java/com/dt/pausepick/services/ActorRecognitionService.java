@@ -1,11 +1,11 @@
 package com.dt.pausepick.services;
 
+import com.dt.pausepick.dto.Dtos;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.rekognition.RekognitionClient;
-import software.amazon.awssdk.services.rekognition.model.Celebrity;
 import software.amazon.awssdk.services.rekognition.model.DetectLabelsRequest;
 import software.amazon.awssdk.services.rekognition.model.DetectLabelsResponse;
 import software.amazon.awssdk.services.rekognition.model.Image;
@@ -50,14 +50,13 @@ public class ActorRecognitionService {
         return null;
     }
 
-    public List<String> recognizeActor(byte[] bytes, String key) {
+    public List<Dtos.Person> recognizeActor(byte[] bytes, String key) {
         RekognitionClient rekClient = getClient();
 
         Image souImage = getImage(bytes);
         RecognizeCelebritiesRequest request = RecognizeCelebritiesRequest.builder().image(souImage).build();
         RecognizeCelebritiesResponse result = rekClient.recognizeCelebrities(request);
-        return result.celebrityFaces().stream()
-                .map(Celebrity::name).toList();
+        return result.celebrityFaces().stream().map(Dtos.Person::toPerson).toList();
     }
 
     private static Image getImage(byte[] bytes) {
