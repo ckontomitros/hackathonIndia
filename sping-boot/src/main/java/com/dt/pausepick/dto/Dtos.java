@@ -25,10 +25,10 @@ public class Dtos {
                     celebrity.name(),
                     celebrity.id(),
                     new BoundingBox(
-                            celebrity.face().boundingBox().left(),
-                            celebrity.face().boundingBox().top(),
-                            celebrity.face().boundingBox().width(),
-                            celebrity.face().boundingBox().height()
+                            Math.round(100*celebrity.face().boundingBox().left()),
+                            Math.round(100*celebrity.face().boundingBox().top()),
+                                    Math.round(100*celebrity.face().boundingBox().width()),
+                                            Math.round(100*celebrity.face().boundingBox().height())
                     ),
                     celebrity.matchConfidence(),
                     celebrity.knownGender().typeAsString(),
@@ -42,10 +42,10 @@ public class Dtos {
 
 
     public record BoundingBox(
-            Float left,
-            Float top,
-            Float width,
-            Float height
+            Integer left,
+            Integer top,
+            Integer width,
+            Integer height
     ) {
     }
 

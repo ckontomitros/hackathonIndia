@@ -3,6 +3,7 @@ import { getActors } from "../api";
 import Header from "../components/header";
 import { getCurrencyFormat, getFullDate } from "../helpers";
 import { Link } from "react-router-dom";
+import BoundingBox from "./boundingbox";
 
 const Root = () => {
   const videoRef = useRef(null);
@@ -10,6 +11,7 @@ const Root = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [actors, setActors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [box, setBox] = useState([]);
 
   const handleStart = () => {
     setSidebarVisible(false);
@@ -30,7 +32,9 @@ const Root = () => {
     try {
       const actorsResponse = await getActors(imageUrl);
 
-      setActors(actorsResponse.data);
+     setActors(actorsResponse.data);
+      setBox(actorsResponse.data.map((c) => c.boundingBox))
+
     } catch (error) {
       console.error("error", error);
     } finally {
@@ -61,9 +65,9 @@ const Root = () => {
                 onPlay={handleStart}
                 controls
               ></video>
-              <div className="absolute top-2 left-2 w-40 h-24 bg-blue-200 border-2 border-black p-2 shadow-lg">
-                This is a small box at the top left.
-              </div>
+              {box.map( b => <BoundingBox top={b.top} left={b.left} height={b.height} key={b.top} width={b.width}>
+              </BoundingBox>)}
+        
             </div>
             <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
             <button
