@@ -36,7 +36,7 @@ const Root = () => {
   };
 
   const mainClassnames = useMemo(
-    () => (sidebarVisible ? "my-2 px-2 w-full overflow-hidden xl:w-2/3 " : "my-2 px-2 w-full overflow-hidden"),
+    () => (sidebarVisible ? "my-2 px-2 w-full overflow-hidden xl:w-2/3 transition-all duration-1000" : "my-2 px-2 w-full overflow-hidden transition-all duration-1000"),
     [sidebarVisible]
   );
 
