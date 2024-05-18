@@ -8,3 +8,18 @@ export const dataURIToBlob = (dataURI) => {
 
   return new Blob([ia], { type: mimeString });
 };
+
+export const getFullDate = (dateString) => {
+  var date = new Date(dateString);
+  var options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+  return date.toLocaleDateString("en-US", options);
+};
+
+export const getCurrencyFormat = (value) => {
+  var formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
+  return formatter.format(value);
+};

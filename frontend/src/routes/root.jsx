@@ -1,18 +1,19 @@
 import { useRef, useState, useMemo } from "react";
 import { getActors, getLabels } from "../api";
 import Header from "../components/header";
+import { getCurrencyFormat, getFullDate } from "../helpers";
 
 const Root = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
-  const [actorNames, setActorNames] = useState([]);
+  const [actors, setActors] = useState([]);
   const [labels, setLabels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleStart = () => {
     setSidebarVisible(false);
-    setActorNames([]);
+    setActors([]);
   };
 
   const handlePause = async () => {
@@ -30,8 +31,7 @@ const Root = () => {
       const actorsResponse = await getActors(imageUrl);
       const labelsResponse = await getLabels(imageUrl);
 
-      setActorNames(actorsResponse.data.map((c) => c.name));
-
+      setActors(actorsResponse.data);
       setLabels(labelsResponse.data);
     } catch (error) {
       console.error("error", error);
@@ -43,8 +43,8 @@ const Root = () => {
   const mainClassnames = useMemo(
     () =>
       sidebarVisible
-        ? "my-2 px-2 w-full overflow-hidden xl:w-2/3 transition-all duration-1000"
-        : "my-2 px-2 w-full overflow-hidden transition-all duration-1000",
+        ? "my-2 px-2 w-full overflow-hidden flex flex-col xl:w-2/3 transition-all duration-1000"
+        : "my-2 px-2 w-full overflow-hidden flex flex-col transition-all duration-1000",
     [sidebarVisible]
   );
 
@@ -68,10 +68,11 @@ const Root = () => {
               </div>
             </div>
             <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
+            <button onClick={handlePause}></button>
           </main>
           {sidebarVisible && (
             <aside className="my-2 px-2 w-full overflow-hidden xl:w-1/3 text-gray-900">
-              <div className="mb-8">
+              <div className="mb-6">
                 <h5 className="mb-2 text-lg font-semibold flex gap-2">
                   <svg
                     className="w-6 h-6"
@@ -92,47 +93,42 @@ const Root = () => {
                 </h5>
                 {isLoading ? (
                   <div>Searching...</div>
-                ) : !actorNames.length ? (
+                ) : !actors.length ? (
                   <div>No actors identified.</div>
                 ) : (
-                  <ul className="max-w-xl space-y-1 list-none">
-                    {actorNames.map((name, index) => (
-                      <li key={index}>{name}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-              <div>
-                <h5 className="mb-2 text-lg font-semibold flex gap-2">
-                  <svg
-                    className="w-6 h-6"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"
-                    />
-                  </svg>
-                  <span>Points of interest</span>
-                </h5>
-                {isLoading ? (
-                  <div>Searching...</div>
-                ) : !labels.length ? (
-                  <div>No actors identified.</div>
-                ) : (
-                  <ul className="max-w-xl space-y-1 list-none">
-                    {labels.map((label, index) => (
-                      <li key={index}>{label.name}</li>
-                    ))}
-                  </ul>
+                  actors.map((actor, index) => {
+                    console.log("actor", actor);
+                    return (
+                      <div key={index} className="p-4 mw-full mx-auto bg-white rounded-xl shadow-lg flex items-center">
+                        <div>
+                          <div className="text-2xl font-medium mb-2">
+                            {`${actor.actorDetails.name}`}
+                            <span className={"ms-1 font-thin text-xs"}>{`(${actor.actorDetails.gender})`}</span>
+                          </div>
+                          <dl>
+                            <dt className="text-gray-500">Information:</dt>
+                            <dd>
+                              <div>{`Birthday: ${getFullDate(actor.actorDetails.birthday)} (${
+                                actor.actorDetails.age
+                              } years old)`}</div>
+                              <div>{`Nationality: ${actor.actorDetails.nationality}`}</div>
+                              <div>{`Height: ${actor.actorDetails.height}m`}</div>
+                              <div>{`Net Worth: ${getCurrencyFormat(actor.actorDetails.net_worth)}`}</div>
+                            </dd>
+
+                            <dt className="text-gray-500 mt-1">Links:</dt>
+                            {actor.urls.map((link, index) => (
+                              <dd key={index}>
+                                <a href={link} target="_blank" rel="noreferrer">
+                                  {link}
+                                </a>
+                              </dd>
+                            ))}
+                          </dl>
+                        </div>
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </aside>
